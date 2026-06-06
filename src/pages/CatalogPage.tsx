@@ -39,11 +39,11 @@ export default function CatalogPage() {
             <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 20 }}>
               <select
                 className="input-field"
-                value={filters.sort || "default"}
+                value={filters.sort || "newest"}
                 onChange={(e) => useFilterStore.getState().setFilters({ sort: e.target.value })}
                 style={{ width: "auto", minWidth: 180, padding: "8px 12px", fontSize: "0.85rem" }}
               >
-                <option value="default">{t("catalog_sort_default")}</option>
+                <option value="newest">{t("catalog_sort_default")}</option>
                 <option value="price_asc">{t("catalog_sort_price_asc")}</option>
                 <option value="price_desc">{t("catalog_sort_price_desc")}</option>
                 <option value="rating_desc">{t("catalog_sort_rating")}</option>

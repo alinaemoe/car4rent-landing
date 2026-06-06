@@ -22,12 +22,20 @@ export function CarFilters() {
     convertible: i18n.language === "ru" ? "Кабриолет" : "Convertible",
   };
 
-  const toggleArray = (key: "brands" | "body_types" | "features", value: string) => {
+  const toggleArray = (key: "brands" | "body_types", value: string) => {
     const current = filters[key] || [];
     const next = current.includes(value)
       ? current.filter((v) => v !== value)
       : [...current, value];
     setFilters({ [key]: next });
+  };
+
+  const toggleFeature = (id: number) => {
+    const current = filters.feature_ids || [];
+    const next = current.includes(id)
+      ? current.filter((v) => v !== id)
+      : [...current, id];
+    setFilters({ feature_ids: next });
   };
 
   const content = (
@@ -117,16 +125,16 @@ export function CarFilters() {
             className="input-field"
             type="number"
             placeholder={i18n.language === "ru" ? "От" : "From"}
-            value={filters.price_min || ""}
-            onChange={(e) => setFilters({ price_min: e.target.value ? Number(e.target.value) : undefined })}
+            value={filters.min_price || ""}
+            onChange={(e) => setFilters({ min_price: e.target.value ? Number(e.target.value) : undefined })}
             style={{ padding: "8px 12px", fontSize: "0.8rem" }}
           />
           <input
             className="input-field"
             type="number"
             placeholder={i18n.language === "ru" ? "До" : "To"}
-            value={filters.price_max || ""}
-            onChange={(e) => setFilters({ price_max: e.target.value ? Number(e.target.value) : undefined })}
+            value={filters.max_price || ""}
+            onChange={(e) => setFilters({ max_price: e.target.value ? Number(e.target.value) : undefined })}
             style={{ padding: "8px 12px", fontSize: "0.8rem" }}
           />
         </div>
@@ -137,8 +145,8 @@ export function CarFilters() {
         <div className="filter-group__title">{t("catalog_filter_rating")}</div>
         <select
           className="input-field"
-          value={filters.rating_min || ""}
-          onChange={(e) => setFilters({ rating_min: e.target.value ? Number(e.target.value) : undefined })}
+          value={filters.min_rating || ""}
+          onChange={(e) => setFilters({ min_rating: e.target.value ? Number(e.target.value) : undefined })}
           style={{ padding: "8px 12px", fontSize: "0.8rem" }}
         >
           <option value="">{i18n.language === "ru" ? "Любой" : "Any"}</option>
@@ -156,13 +164,13 @@ export function CarFilters() {
             {features.map((f) => (
               <label
                 key={f.id}
-                className={`badge ${filters.features?.includes(f.slug) ? "badge--accent" : "badge--ghost"}`}
+                className={`badge ${filters.feature_ids?.includes(f.id) ? "badge--accent" : "badge--ghost"}`}
                 style={{ cursor: "pointer" }}
               >
                 <input
                   type="checkbox"
-                  checked={filters.features?.includes(f.slug) || false}
-                  onChange={() => toggleArray("features", f.slug)}
+                  checked={filters.feature_ids?.includes(f.id) || false}
+                  onChange={() => toggleFeature(f.id)}
                   style={{ display: "none" }}
                 />
                 {f.name}

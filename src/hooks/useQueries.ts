@@ -10,14 +10,41 @@ import {
   fetchLanguages,
   fetchSettings,
 } from "@/lib/api-client";
-import type { CatalogFilters, Car, Feature, Location, Review, Faq, NewsItem, Language, Setting } from "@/types";
-import { MOCK_FEATURES, MOCK_LOCATIONS, MOCK_REVIEWS, MOCK_FAQS, MOCK_NEWS, MOCK_SETTINGS, generateMockCars } from "@/mock/data";
+import type {
+  CatalogFilters,
+  Car,
+  Feature,
+  Location,
+  Review,
+  Faq,
+  NewsItem,
+  Language,
+  Setting,
+} from "@/types";
+import {
+  MOCK_FEATURES,
+  MOCK_LOCATIONS,
+  MOCK_REVIEWS,
+  MOCK_FAQS,
+  MOCK_NEWS,
+  MOCK_SETTINGS,
+  generateMockCars,
+} from "@/mock/data";
 
 export function useCatalog(filters: CatalogFilters = {}) {
   return useQuery({
     queryKey: ["cars", "catalog", filters],
-    queryFn: () => fetchCars(filters),
-    staleTime: 30_000,
+    queryFn: async () => {
+      try {
+        return await fetchCars(filters);
+      } catch {
+        return {
+          data: generateMockCars(4),
+          meta: { total: 20, page: 1, limit: 4, total_pages: 5 },
+        };
+      }
+    },
+    staleTime: 0,
     initialData: {
       data: generateMockCars(4),
       meta: { total: 20, page: 1, limit: 4, total_pages: 5 },
@@ -28,9 +55,15 @@ export function useCatalog(filters: CatalogFilters = {}) {
 export function useCarDetail(id: number | null) {
   return useQuery({
     queryKey: ["cars", "detail", id],
-    queryFn: () => fetchCarDetail(id!),
+    queryFn: async () => {
+      try {
+        return await fetchCarDetail(id!);
+      } catch {
+        return generateMockCars(1)[0];
+      }
+    },
     enabled: id !== null,
-    staleTime: 60_000,
+    staleTime: 0,
     initialData: null,
   });
 }
@@ -38,8 +71,14 @@ export function useCarDetail(id: number | null) {
 export function useFeatures() {
   return useQuery<Feature[]>({
     queryKey: ["features"],
-    queryFn: fetchFeatures,
-    staleTime: 300_000,
+    queryFn: async () => {
+      try {
+        return await fetchFeatures();
+      } catch {
+        return MOCK_FEATURES as Feature[];
+      }
+    },
+    staleTime: 0,
     initialData: MOCK_FEATURES as Feature[],
   });
 }
@@ -47,8 +86,14 @@ export function useFeatures() {
 export function useLocations() {
   return useQuery<Location[]>({
     queryKey: ["locations"],
-    queryFn: fetchLocations,
-    staleTime: 300_000,
+    queryFn: async () => {
+      try {
+        return await fetchLocations();
+      } catch {
+        return MOCK_LOCATIONS as Location[];
+      }
+    },
+    staleTime: 0,
     initialData: MOCK_LOCATIONS as Location[],
   });
 }
@@ -56,8 +101,14 @@ export function useLocations() {
 export function useCompanyReviews() {
   return useQuery<Review[]>({
     queryKey: ["reviews", "company"],
-    queryFn: fetchCompanyReviews,
-    staleTime: 60_000,
+    queryFn: async () => {
+      try {
+        return await fetchCompanyReviews();
+      } catch {
+        return MOCK_REVIEWS as Review[];
+      }
+    },
+    staleTime: 0,
     initialData: MOCK_REVIEWS as Review[],
   });
 }
@@ -65,8 +116,14 @@ export function useCompanyReviews() {
 export function useFaqs() {
   return useQuery<Faq[]>({
     queryKey: ["faq"],
-    queryFn: fetchFaqs,
-    staleTime: 300_000,
+    queryFn: async () => {
+      try {
+        return await fetchFaqs();
+      } catch {
+        return MOCK_FAQS as Faq[];
+      }
+    },
+    staleTime: 0,
     initialData: MOCK_FAQS as Faq[],
   });
 }
@@ -74,8 +131,14 @@ export function useFaqs() {
 export function useNews() {
   return useQuery<NewsItem[]>({
     queryKey: ["news"],
-    queryFn: fetchNews,
-    staleTime: 60_000,
+    queryFn: async () => {
+      try {
+        return await fetchNews();
+      } catch {
+        return MOCK_NEWS as NewsItem[];
+      }
+    },
+    staleTime: 0,
     initialData: MOCK_NEWS as NewsItem[],
   });
 }
@@ -83,8 +146,17 @@ export function useNews() {
 export function useLanguages() {
   return useQuery<Language[]>({
     queryKey: ["languages"],
-    queryFn: fetchLanguages,
-    staleTime: 300_000,
+    queryFn: async () => {
+      try {
+        return await fetchLanguages();
+      } catch {
+        return [
+          { id: 1, code: "ru", name: "Русский", is_active: true },
+          { id: 2, code: "en", name: "English", is_active: true },
+        ] as Language[];
+      }
+    },
+    staleTime: 0,
     initialData: [
       { id: 1, code: "ru", name: "Русский", is_active: true },
       { id: 2, code: "en", name: "English", is_active: true },
@@ -95,8 +167,14 @@ export function useLanguages() {
 export function useSettings() {
   return useQuery<Setting[]>({
     queryKey: ["settings"],
-    queryFn: fetchSettings,
-    staleTime: 300_000,
+    queryFn: async () => {
+      try {
+        return await fetchSettings();
+      } catch {
+        return MOCK_SETTINGS as Setting[];
+      }
+    },
+    staleTime: 0,
     initialData: MOCK_SETTINGS as Setting[],
   });
 }

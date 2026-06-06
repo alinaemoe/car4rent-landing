@@ -8,13 +8,13 @@ interface FilterStore {
 }
 
 export const useFilterStore = create<FilterStore>((set) => ({
-  filters: { page: 1, limit: 12, sort: "default" },
+  filters: { page: 1, limit: 12, sort: "newest" },
   setFilters: (newFilters) =>
     set((state) => ({
       filters: { ...state.filters, ...newFilters, page: 1 },
     })),
   resetFilters: () =>
-    set({ filters: { page: 1, limit: 12, sort: "default" } }),
+    set({ filters: { page: 1, limit: 12, sort: "newest" } }),
 }));
 
 interface FavoritesStore {
