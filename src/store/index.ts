@@ -10,9 +10,18 @@ interface FilterStore {
 export const useFilterStore = create<FilterStore>((set) => ({
   filters: { page: 1, limit: 12, sort: "newest" },
   setFilters: (newFilters) =>
-    set((state) => ({
-      filters: { ...state.filters, ...newFilters, page: 1 },
-    })),
+    set((state) => {
+      // Only reset to page 1 when actual filter criteria change,
+      // not when "Load More" increments the page itself.
+      const isPageOnly = Object.keys(newFilters).length === 1 && "page" in newFilters;
+      return {
+        filters: {
+          ...state.filters,
+          ...newFilters,
+          page: isPageOnly ? (newFilters.page ?? 1) : 1,
+        },
+      };
+    }),
   resetFilters: () =>
     set({ filters: { page: 1, limit: 12, sort: "newest" } }),
 }));

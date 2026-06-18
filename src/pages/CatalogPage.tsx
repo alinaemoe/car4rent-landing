@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import type { Car } from "@/types";
 import { Header } from "../components/layout/Header";
 import { Footer } from "../components/layout/Footer";
 import { CarFilters } from "../components/car/CarFilters";
@@ -13,11 +14,31 @@ import { useFilterStore } from "../store";
 export default function CatalogPage() {
   const { t } = useTranslation();
   const { filters } = useFilterStore();
-  const { data, isLoading } = useCatalog(filters);
+  const { data, isFetching } = useCatalog(filters);
   const [detailCarId, setDetailCarId] = useState<number | null>(null);
+  const [allCars, setAllCars] = useState<Car[]>([]);
+  const lastPageRef = useRef(0);
 
-  const cars = data?.data || [];
+  useEffect(() => {
+    if (!data?.data) return;
+    const page = filters.page ?? 1;
+    if (page === 1) {
+      // Filter changed or initial load — always replace
+      setAllCars(data.data);
+      lastPageRef.current = 1;
+    } else if (!isFetching && page > lastPageRef.current) {
+      // "Load More" fetch completed — append without duplicates
+      setAllCars((prev) => {
+        const seen = new Set(prev.map((c) => c.id));
+        const fresh = data.data.filter((c) => !seen.has(c.id));
+        return fresh.length ? [...prev, ...fresh] : prev;
+      });
+      lastPageRef.current = page;
+    }
+  }, [data?.data, filters.page, isFetching]);
+
   const total = data?.meta?.total || 0;
+  const showSkeleton = isFetching && allCars.length === 0;
 
   return (
     <>
@@ -50,7 +71,7 @@ export default function CatalogPage() {
               </select>
             </div>
 
-            {isLoading ? (
+            {showSkeleton ? (
               <div className="premium-grid">
                 {[1, 2, 3, 4, 5, 6].map((i) => (
                   <div key={i} className="glass-card" style={{ aspectRatio: "3/4" }}>
@@ -60,16 +81,17 @@ export default function CatalogPage() {
                   </div>
                 ))}
               </div>
-            ) : cars.length > 0 ? (
+            ) : allCars.length > 0 ? (
               <>
-                <CarGrid cars={cars} onDetail={setDetailCarId} />
-                {data?.meta && data.meta.page < data.meta.total_pages && (
+                <CarGrid cars={allCars} onDetail={setDetailCarId} />
+                {data?.meta && (filters.page ?? 1) < data.meta.total_pages && (
                   <div style={{ textAlign: "center", marginTop: 32 }}>
                     <button
                       className="btn-secondary"
+                      disabled={isFetching}
                       onClick={() => useFilterStore.getState().setFilters({ page: (filters.page || 1) + 1 })}
                     >
-                      {t("catalog_load_more")}
+                      {isFetching ? t("loading") : t("catalog_load_more")}
                     </button>
                   </div>
                 )}
