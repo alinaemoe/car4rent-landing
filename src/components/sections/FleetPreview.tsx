@@ -23,16 +23,18 @@ export function FleetPreview({ onDetail }: FleetPreviewProps) {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("");
 
-  const bodyTypeMap: Record<string, string> = {
-    economy: "economy",
-    comfort: "comfort",
-    business: "business",
-    premium: "premium",
-    suv: "suv",
+  // Maps semantic fleet categories to actual body_type values stored in the DB.
+  // Backend body_type field: sedan, hatchback, wagon, coupe, suv, convertible.
+  const bodyTypeMap: Record<string, string[]> = {
+    economy: ["hatchback"],
+    comfort: ["sedan", "wagon"],
+    business: ["coupe", "sedan"],
+    premium: ["convertible"],
+    suv: ["suv"],
   };
 
   const filters = activeTab
-    ? { body_types: [bodyTypeMap[activeTab]], limit: 4, sort: "rating_desc" }
+    ? { body_types: bodyTypeMap[activeTab] ?? [], limit: 4, sort: "rating_desc" }
     : { limit: 4, sort: "rating_desc" };
 
   const { data, isLoading } = useCatalog(filters);
