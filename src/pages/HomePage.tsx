@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Header } from "../components/layout/Header";
 import { Footer } from "../components/layout/Footer";
 import { Hero } from "../components/sections/Hero";
@@ -19,6 +20,18 @@ import { CarDetailModal } from "../components/car/CarDetailModal";
 
 export default function HomePage() {
   const [detailCarId, setDetailCarId] = useState<number | null>(null);
+  const { hash } = useLocation();
+
+  // When navigating here from another page with a hash (e.g. /#reviews),
+  // scroll to the target section after it mounts.
+  useEffect(() => {
+    if (!hash) return;
+    const id = hash.slice(1);
+    const timer = setTimeout(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    }, 150);
+    return () => clearTimeout(timer);
+  }, [hash]);
 
   return (
     <>

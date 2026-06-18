@@ -5,6 +5,7 @@ import { LanguageSwitcher } from "@/components/common/LanguageSwitcher";
 import { MobileNav } from "./MobileNav";
 import { useState, useEffect } from "react";
 import { useScrollSpy } from "@/hooks/useScrollSpy";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const NAV_ITEMS = [
   { key: "nav_catalog", href: "/catalog" },
@@ -18,6 +19,8 @@ const SECTION_IDS = ["how-it-works", "reviews", "faq", "contacts"];
 
 export function Header() {
   const { t } = useTranslation();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const activeSection = useScrollSpy(SECTION_IDS, 100);
@@ -29,11 +32,13 @@ export function Header() {
   }, []);
 
   const handleNavClick = (href: string) => {
-    if (href.startsWith("#")) {
+    if (!href.startsWith("#")) return;
+    if (location.pathname === "/") {
       const el = document.querySelector(href);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      // Navigate to homepage; HomePage's useEffect will scroll to the hash
+      navigate(`/${href}`);
     }
   };
 

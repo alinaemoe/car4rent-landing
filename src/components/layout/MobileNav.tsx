@@ -3,6 +3,7 @@
 import { useTranslation } from "@/hooks/useTranslation";
 import { LanguageSwitcher } from "@/components/common/LanguageSwitcher";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const NAV_ITEMS = [
   { key: "nav_catalog", href: "/catalog" },
@@ -19,6 +20,19 @@ interface MobileNavProps {
 
 export function MobileNav({ isOpen, onClose }: MobileNavProps) {
   const { t } = useTranslation();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleNavClick = (href: string) => {
+    onClose();
+    if (!href.startsWith("#")) return;
+    if (location.pathname === "/") {
+      const el = document.querySelector(href);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      navigate(`/${href}`);
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -52,7 +66,14 @@ export function MobileNav({ isOpen, onClose }: MobileNavProps) {
                 <a
                   key={item.key}
                   href={item.href}
-                  onClick={onClose}
+                  onClick={(e) => {
+                    if (item.href.startsWith("#")) {
+                      e.preventDefault();
+                      handleNavClick(item.href);
+                    } else {
+                      onClose();
+                    }
+                  }}
                   style={{
                     padding: "12px 16px",
                     borderRadius: 8,

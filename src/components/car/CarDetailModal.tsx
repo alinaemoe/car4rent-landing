@@ -5,6 +5,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { formatPrice, calculateDiscount, getDaysBetween } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface CarDetailModalProps {
   carId: number | null;
@@ -13,6 +14,8 @@ interface CarDetailModalProps {
 
 export function CarDetailModal({ carId, onClose }: CarDetailModalProps) {
   const { t, i18n } = useTranslation();
+  const location = useLocation();
+  const navigate = useNavigate();
   const { data: car, isLoading } = useCarDetail(carId);
   const [imgIndex, setImgIndex] = useState(0);
 
@@ -184,7 +187,15 @@ export function CarDetailModal({ carId, onClose }: CarDetailModalProps) {
                 )}
 
                 {/* Book button */}
-                <a href="#contacts" className="btn-primary" style={{ width: "100%", justifyContent: "center", padding: "16px", fontSize: "1rem" }} onClick={(e) => { e.preventDefault(); onClose(); setTimeout(() => document.getElementById("contacts")?.scrollIntoView({ behavior: "smooth" }), 300); }}>
+                <a href="#contacts" className="btn-primary" style={{ width: "100%", justifyContent: "center", padding: "16px", fontSize: "1rem" }} onClick={(e) => {
+                  e.preventDefault();
+                  onClose();
+                  if (location.pathname === "/") {
+                    setTimeout(() => document.getElementById("contacts")?.scrollIntoView({ behavior: "smooth" }), 300);
+                  } else {
+                    navigate("/#contacts");
+                  }
+                }}>
                   {t("car_detail_book")}
                 </a>
               </div>
