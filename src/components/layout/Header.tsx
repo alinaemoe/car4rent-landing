@@ -88,7 +88,7 @@ export function Header() {
 
           <div className="header__actions">
             <LanguageSwitcher />
-            <a href="#contacts" className="btn-primary" style={{ padding: "8px 20px", fontSize: "0.85rem" }} onClick={(e) => { e.preventDefault(); handleNavClick("#contacts"); }}>
+            <a href="#contacts" className="btn-primary header-book-btn" style={{ padding: "8px 20px", fontSize: "0.85rem" }} onClick={(e) => { e.preventDefault(); handleNavClick("#contacts"); }}>
               {t("hero_cta")}
             </a>
             <button

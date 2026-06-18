@@ -217,6 +217,11 @@
     display: flex !important;
   }
 
+  /* Hide the "Забронировать" booking button — hamburger menu is enough */
+  .header-book-btn {
+    display: none !important;
+  }
+
   .footer__grid {
     grid-template-columns: 1fr;
     gap: 32px;
