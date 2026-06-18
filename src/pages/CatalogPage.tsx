@@ -11,8 +11,27 @@ import { useTranslation } from "../hooks/useTranslation";
 import { useCatalog } from "../hooks/useQueries";
 import { useFilterStore } from "../store";
 
+interface PriceTier {
+  id: string;
+  ru: string;
+  en: string;
+  minPrice: number;
+  maxPrice?: number;
+  sub: string;
+}
+
+const PRICE_TIERS: PriceTier[] = [
+  { id: "BUDGET", ru: "Бюджет", en: "Budget", minPrice: 0, maxPrice: 70, sub: "до 70 Br" },
+  { id: "STANDARD", ru: "Стандарт", en: "Standard", minPrice: 70, maxPrice: 120, sub: "70–120 Br" },
+  { id: "COMFORT", ru: "Комфорт+", en: "Comfort+", minPrice: 120, maxPrice: 170, sub: "120–170 Br" },
+  { id: "BUSINESS", ru: "Бизнес", en: "Business", minPrice: 170, maxPrice: 300, sub: "170–300 Br" },
+  { id: "PREMIUM", ru: "Премиум", en: "Premium", minPrice: 300, maxPrice: 600, sub: "300–600 Br" },
+  { id: "ELITE", ru: "Элита", en: "Elite", minPrice: 600, maxPrice: undefined, sub: "от 600 Br" },
+];
+
 export default function CatalogPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isRu = i18n.language === "ru";
   const { filters } = useFilterStore();
   const { data, isFetching } = useCatalog(filters);
   const [detailCarId, setDetailCarId] = useState<number | null>(null);
@@ -55,6 +74,68 @@ export default function CatalogPage() {
               <p style={{ color: "var(--text-muted)", fontSize: "0.9rem" }}>
                 {t("catalog_found")}: {total}
               </p>
+            </div>
+
+            {/* Price tier tabs — same class structure as mobile CatalogListHeader */}
+            <div
+              style={{
+                display: "flex",
+                gap: 10,
+                overflowX: "auto",
+                paddingBottom: 8,
+                marginBottom: 20,
+                scrollbarWidth: "none",
+              }}
+            >
+              {PRICE_TIERS.map((tier) => {
+                const isActive =
+                  filters.min_price === tier.minPrice &&
+                  filters.max_price === tier.maxPrice;
+                return (
+                  <button
+                    key={tier.id}
+                    onClick={() => {
+                      const sf = useFilterStore.getState().setFilters;
+                      if (isActive) {
+                        sf({ min_price: undefined, max_price: undefined });
+                      } else {
+                        sf({ min_price: tier.minPrice, max_price: tier.maxPrice });
+                      }
+                    }}
+                    style={{
+                      flexShrink: 0,
+                      padding: "10px 16px",
+                      borderRadius: 14,
+                      border: `2px solid ${isActive ? "var(--accent)" : "var(--border-light, rgba(255,255,255,0.1))"}`,
+                      background: isActive ? "rgba(245,158,11,0.12)" : "rgba(255,255,255,0.04)",
+                      cursor: "pointer",
+                      transition: "all 0.2s",
+                      textAlign: "center",
+                      minWidth: 104,
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontFamily: "var(--font-display)",
+                        fontSize: "0.9rem",
+                        fontWeight: 800,
+                        color: isActive ? "var(--accent)" : "var(--text-main)",
+                        marginBottom: 2,
+                      }}
+                    >
+                      {isRu ? tier.ru : tier.en}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "0.72rem",
+                        color: isActive ? "var(--accent)" : "var(--text-muted)",
+                      }}
+                    >
+                      {tier.sub}
+                    </div>
+                  </button>
+                );
+              })}
             </div>
 
             <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 20 }}>
