@@ -26,15 +26,11 @@ export function HowItWorks() {
 
         <div
           className="how-it-works-grid"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: 32,
-            position: "relative",
-          }}
+          style={{ position: "relative" }}
         >
-          {/* Connecting line */}
+          {/* Connecting line — hidden on mobile via CSS */}
           <div
+            className="how-it-works-connecting-line"
             style={{
               position: "absolute",
               top: 60,

@@ -227,6 +227,41 @@
     gap: 16px;
     text-align: center;
   }
+
+  /* ─── General mobile resets ─── */
+
+  /* Reduce section vertical spacing on mobile */
+  .section-padding {
+    padding: 56px 0;
+  }
+
+  /* HowItWorks connecting line is invisible between stacked cards */
+  .how-it-works-connecting-line {
+    display: none;
+  }
+
+  /* Ensure glass cards inside how-it-works don't have too much padding */
+  .how-it-works-grid .glass-card {
+    padding: 28px 20px !important;
+  }
+
+  /* LocationsMap: stack map on top of address list */
+  .locations-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Reduce modal padding on mobile */
+  .modal-content {
+    padding: 24px 20px;
+    margin: 12px;
+    max-width: calc(100vw - 24px);
+    border-radius: 16px;
+  }
+
+  /* Glass-strong blocks should not have excess padding on mobile */
+  .partnership-card {
+    padding: 28px 20px !important;
+  }
 }
 
 @media (min-width: 769px) and (max-width: 1199px) {
@@ -234,6 +269,13 @@
     grid-template-columns: 1fr 1fr;
     gap: 32px;
   }
+}
+
+/* ─── How It Works grid ─── */
+.how-it-works-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
 }
 
 /* ─── Catalog Layout ─── */

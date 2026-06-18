@@ -29,7 +29,7 @@ export function PartnershipCta() {
     <section className="section-padding" style={{ position: "relative", overflow: "hidden" }}>
       <div className="ambient-orb" style={{ width: 500, height: 500, top: "-20%", right: "-10%", background: "radial-gradient(circle, rgba(245,158,11,0.1) 0%, transparent 70%)" }} />
       <div className="container-wide" style={{ position: "relative", zIndex: 1 }}>
-        <div className="glass-strong" style={{ borderRadius: 24, padding: "64px 48px", textAlign: "center" }}>
+        <div className="glass-strong" style={{ borderRadius: 24, padding: "clamp(28px, 6vw, 64px) clamp(16px, 4vw, 48px)", textAlign: "center" }}>
           <motion.h2
             className="section-title"
             initial={{ opacity: 0, y: 20 }}
