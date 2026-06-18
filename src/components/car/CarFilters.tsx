@@ -201,7 +201,7 @@ export function CarFilters() {
 
       {/* Mobile filter button */}
       <button
-        className="btn-primary"
+        className="btn-primary catalog-filter-mobile-btn"
         style={{ position: "fixed", bottom: 24, left: "50%", transform: "translateX(-50%)", zIndex: 998, display: "none", padding: "12px 24px" }}
         onClick={() => setMobileOpen(true)}
       >

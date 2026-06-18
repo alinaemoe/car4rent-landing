@@ -262,6 +262,10 @@
   .catalog-sidebar {
     display: none !important;
   }
+
+  .catalog-filter-mobile-btn {
+    display: flex !important;
+  }
 }
 
 @media (min-width: 769px) and (max-width: 1199px) {

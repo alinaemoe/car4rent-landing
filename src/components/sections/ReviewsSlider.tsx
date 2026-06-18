@@ -71,7 +71,7 @@ export function ReviewsSlider() {
                 color: "var(--bg-main)",
               }}
             >
-              {review.author_name.charAt(0)}
+              {(review.author_name || "?").charAt(0)}
             </div>
 
             {/* Stars */}
