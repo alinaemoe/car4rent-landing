@@ -105,17 +105,16 @@ export function LocationsMap() {
         </motion.h2>
 
         <div className="premium-grid--2" style={{ gap: 32 }}>
-          {/* Map container */}
+          {/* Map container — fixed height so Leaflet fills exactly the wrapper */}
           <div
             style={{
               borderRadius: 16,
               overflow: "hidden",
-              minHeight: 400,
+              height: 460,
               border: "1px solid var(--border-low)",
-              background: "var(--bg-dark-2)",
             }}
           >
-            <div ref={mapRef} style={{ height: 400, width: "100%" }} />
+            <div ref={mapRef} style={{ height: "100%", width: "100%" }} />
           </div>
 
           {/* Address list */}
