@@ -8,6 +8,7 @@ import { StatsCounter } from "../components/sections/StatsCounter";
 import { HowItWorks } from "../components/sections/HowItWorks";
 import { FleetPreview } from "../components/sections/FleetPreview";
 import { WhyUs } from "../components/sections/WhyUs";
+import { MobileAppSection } from "../components/sections/MobileAppSection";
 import { ReviewsSlider } from "../components/sections/ReviewsSlider";
 import { LocationsMap } from "../components/sections/LocationsMap";
 import { FaqSection } from "../components/sections/FaqSection";
@@ -44,6 +45,7 @@ export default function HomePage() {
         <HowItWorks />
         <FleetPreview onDetail={setDetailCarId} />
         <WhyUs />
+        <MobileAppSection />
         <ReviewsSlider />
         <LocationsMap />
         <FaqSection />
