@@ -14,6 +14,10 @@
 Car4Rent is a peer-to-peer and fleet **car rental platform** built as a diploma project: clients search
 and book cars, owners publish and manage theirs, and managers run the whole thing from the admin panel.
 
+<p align="center"><img src="docs/screenshots/hero.png" alt="Car4Rent landing: hero with booking bar" width="100%"></p>
+<p align="center"><img src="docs/screenshots/fleet.png" alt="Fleet section with category filters" width="100%"></p>
+<sub>Captured with the bundled mock data (the API was deliberately unreachable), which shows the offline fallback in action.</sub>
+
 ## Highlights
 
 - **Sections for the whole story:** hero, how it works, why us, fleet preview with filters and a car
